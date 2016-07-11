@@ -25,7 +25,7 @@ export default function(options) {
   }
 
   function deleteGFile(options) {
-    options = optiosn || {};
+    options = options || {};
     return new Promise((resolve, reject) => {
       try {
         if (!options.filename) throw new Error("options.filename is a required parameter.");

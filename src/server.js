@@ -1,5 +1,6 @@
 import path from 'path';
 import express from 'express';
+import bodyParser from 'body-parser';
 import GCloud from './lib/gcloud';
 
 const PORT = process.env.APP_PORT;
@@ -8,6 +9,10 @@ const GOOGLE_KEYFILE = path.resolve(__dirname, '..', process.env.GOOGLE_KEYFILE)
 console.log("KEYFILE", GOOGLE_KEYFILE);
 const gcloud = GCloud({GOOGLE_PROJECT_ID, GOOGLE_KEYFILE});
 const server = express();
+
+
+server.use(bodyParser.urlencoded({ extended: false }))
+server.use(bodyParser.json())
 
 server.get('/buckets', function(req, res, next) {
   gcloud.listBuckets().then(buckets => {
@@ -33,8 +38,15 @@ server.get('/getUrl', function(req, res, next) {
     .catch(next);
 })
 
+server.delete('/file', function(req, res, next) {
+  const filename = req.body.filename;
+  gcloud.deleteFile({filename})
+    .then(resp => res.json({resp}))
+    .catch(next);
+})
+
 server.use('/', function(req, res, next) {
-  res.send("router hello");
+  res.send("Structure.pm GCloud Storage Service.");
 });
 
 
