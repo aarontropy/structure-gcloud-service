@@ -6,7 +6,6 @@ import GCloud from './lib/gcloud';
 const PORT = process.env.APP_PORT;
 const GOOGLE_PROJECT_ID = process.env.GOOGLE_PROJECT_ID;
 const GOOGLE_KEYFILE = path.resolve(__dirname, '..', process.env.GOOGLE_KEYFILE);
-console.log("KEYFILE", GOOGLE_KEYFILE);
 const gcloud = GCloud({GOOGLE_PROJECT_ID, GOOGLE_KEYFILE});
 const server = express();
 
@@ -24,7 +23,6 @@ server.get('/putUrl', function(req, res, next) {
   const filename = req.query.filename;
   const contentType = req.query.contentType;
   const bucket = process.env.GOOGLE_DEFAULT_BUCKET;
-
 
   gcloud.generatePutUrl({bucket, filename, contentType})
     .then(url => res.json({url}) )
